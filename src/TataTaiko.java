@@ -123,28 +123,32 @@ public class TataTaiko extends JPanel implements KeyListener {
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
 
-        switch (screen) {
+        switch(screen){
+            // title page
             case 1:
                 if (key == KeyEvent.VK_ENTER) {
                     playDonSound();
                 }
                 handleMenuNavigation(e);
                 break;
-
+            // song select
             case 2:
                 if (key == KeyEvent.VK_ENTER) {
                     playDonSound();
                 }
                 handleSongSelection(e);
                 break;
-
+        // game area
             case 3:
                 // Back to title
                 if (key == KeyEvent.VK_ESCAPE) {
                     screen = 1;
                     mp3Player.stop();
                     if (gameTimer != null) gameTimer.stop();
-                    countGood = countOK = countBad = comboScore = 0;
+                    countGood = 0;
+                    countOK = 0;
+                    comboScore = 0;
+                    gameScore = 0;
                     break;
                 }
 
@@ -189,7 +193,7 @@ public class TataTaiko extends JPanel implements KeyListener {
                     break;
                 }
                 break;
-
+        // end screen
             case 4:
                 if (key == KeyEvent.VK_ESCAPE) {
                     System.exit(0);
@@ -234,7 +238,7 @@ public class TataTaiko extends JPanel implements KeyListener {
                 }
             }
             if(cursorPosition == 1 && screen == 1){
-                TJAtoBin.GUI(null);
+                TJAtoBin.main(null);
             }
         }
     }
@@ -295,6 +299,7 @@ public class TataTaiko extends JPanel implements KeyListener {
 
     // draws the cursor
     public void drawCursorMenu(Graphics g, int[] yPositions) {
+        // clamp to keep the cursorposition in between the actual areas, fixes arrayoutofbounds issues
         if (cursorPosition < 0) {
             cursorPosition = 0;
         } else if (cursorPosition >= yPositions.length) {
@@ -317,6 +322,7 @@ public class TataTaiko extends JPanel implements KeyListener {
         g.setFont(new Font("Meiryo", Font.BOLD, 40));
         FontMetrics fm = g.getFontMetrics();
         String title = "曲の選択 (Song Selection)";
+        // gets ideal width of the title
         int titleWidth = fm.stringWidth(title);
         int titleX = (getWidth() - titleWidth) / 2;
         g.drawString(title, titleX, 100);
@@ -506,7 +512,10 @@ public class TataTaiko extends JPanel implements KeyListener {
                 continue;
             }
 
-            // how far the note has gone
+
+            // calculates how far the note has gone left to right based on the current time
+            // "fraction" is the division of time passed between the start and hit time
+            // changeX is the horizontal distance the note has to travel
             double fraction = (double)(currentTime - (note.hitTime - travelTime)) / travelTime;
             // update x area based on its travel fraction
             int changeX = targetX - laneRightX;
@@ -620,6 +629,7 @@ public class TataTaiko extends JPanel implements KeyListener {
         // how long (in milliseconds) to display the hit animation
         int duration = 100;
 
+        // THE CODE HERE IS REALLY BAD AND WILL LEAD TO MEMORY LEAKS AND INEFFICIENT OBJECT MANAGEMENT
         if (keyCode == KeyEvent.VK_S) {
             // left don
             drawDonLeft = true;
@@ -736,8 +746,10 @@ public class TataTaiko extends JPanel implements KeyListener {
 
         // draw judgement image (good/bad/ok) AND scores
         if (currentJudgmentImage != null) {
+            // calculate how much time has passed since the judgment was displayed
             long elapsed = System.currentTimeMillis() - judgmentDisplayTime;
             if (elapsed < judgmentDisplayDuration) {
+                //draws the image on top of the judgement image
                 g.drawImage(currentJudgmentImage,
                         judgeX - 42, judgeY - 50 - 100,
                         84, 80,
