@@ -753,14 +753,14 @@ public class TataTaiko extends JPanel implements KeyListener {
         g.setColor(Color.white);
         g.drawImage(JudgeMeter, 0, 400, this);
         g.setFont(new Font("Arial", Font.BOLD, 40));
-        g.drawString("" + countGood, 180, 570);
-        g.drawString("" + countOK, 180, 610);
-        g.drawString("" + countBad, 180, 650);
+        g.drawString("" + countGood, 200, 570);
+        g.drawString("" + countOK, 200, 610);
+        g.drawString("" + countBad, 200, 650);
         g.setColor(Color.black);
         g.fillRoundRect(20, 650, 300, 50, 10, 10);
         g.setColor(Color.white);
         g.drawString("コンボ", 40, 690);
-        g.drawString("" + comboScore, 180, 690);
+        g.drawString("" + comboScore, 200, 690);
     }
 
     // draws the end screen and does other misc. ending things such as zeroing the combo and score counters. also stops player.
