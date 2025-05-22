@@ -282,20 +282,38 @@ public class TataTaiko extends JPanel implements KeyListener {
             themeSong.play();
             themeSongPlayed = true;
         }
+
         g.drawImage(TitleImage, 0, 0, getWidth(), getHeight(), this);
-        // y-positions for the title screen
-        int[] positions = {
-                870,
-                920,
-                970
-        };
-        drawCursorMenu(g, positions);
+
+        // scale font size based on screen height
+        int fontSize = getHeight() / 25; // smaller size for lower positioning
+        Font font = new Font("Arial", Font.BOLD, fontSize);
+        g.setFont(font);
+        //uses fontmetrics to get pixel sizes of strings
+        //for making string sizing easier & dynamic
+        FontMetrics fm = g.getFontMetrics();
+
         g.setColor(Color.BLACK);
-        g.setFont(new Font("Arial", Font.BOLD, 40));
-        g.drawString("Song Select", 900, 900);
-        g.drawString("TJA to Bin", 900, 950);
-        g.drawString("Exit",  900, 1000);
+
+        String[] options = { "Song Select", "TJA to Bin", "Exit" };
+
+        // start drawing around 80% down the screen
+        int startY = (int)(getHeight() * 0.75);
+        int spacing = fm.getHeight() + 10;
+
+        int[] positions = new int[3];
+        for (int i = 0; i < 3; i++) {
+            String text = options[i];
+            int textWidth = fm.stringWidth(text);
+            int x = getWidth() / 2 - textWidth / 2;
+            int y = startY + i * spacing;
+            g.drawString(text, x, y);
+            positions[i] = y - fm.getAscent() / 2;
+        }
+
+        drawCursorMenu(g, positions);
     }
+
 
     // draws the cursor
     public void drawCursorMenu(Graphics g, int[] yPositions) {
@@ -311,11 +329,11 @@ public class TataTaiko extends JPanel implements KeyListener {
             g.drawImage(CursorMenu, cursorX, yPositions[cursorPosition] - 25, this);
             // title screen
         } else if (screen == 1) {
-            g.drawImage(CursorMenu, 800, yPositions[cursorPosition], this);
+            g.drawImage(CursorMenu, 780, yPositions[cursorPosition] - 20, this);
         }
     }
     // draws song select while stripping out filenames, uses fontmetrics to get pixel sizes of strings
-    // for making string sizing easier
+    // for making string sizing easier & dynamic
     public void drawSongSelect(Graphics g) {
         g.drawImage(SongSelectBackground, 0, 0, getWidth(), getHeight(), this);
         g.setColor(Color.WHITE);
