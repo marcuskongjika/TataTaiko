@@ -147,6 +147,7 @@ public class TataTaiko extends JPanel implements KeyListener {
                     if (gameTimer != null) gameTimer.stop();
                     countGood = 0;
                     countOK = 0;
+                    countBad = 0;
                     comboScore = 0;
                     gameScore = 0;
                     break;
@@ -789,7 +790,7 @@ public class TataTaiko extends JPanel implements KeyListener {
         g.setColor(Color.black);
         g.fillRoundRect(20, 650, 300, 50, 10, 10);
         g.setColor(Color.white);
-        g.drawString("コンボ", 40, 690);
+        g.drawString("Combo", 40, 690);
         g.drawString("" + comboScore, 200, 690);
     }
 
