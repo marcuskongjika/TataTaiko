@@ -7,6 +7,7 @@ This rhythm game is inspired by Taiko no Tatsujin, the Japanese arcade drumming 
 
 ```bash
 Java >= 20             # Earlier versions may still work, but are untested
+Apache Commons Codec >= 1.18 # SHA hashing, security.
 JLayer >= 1.0.1        # https://github.com/umjammer/jlayer
 Python 3               # Used for the TJA to BIN conversion tool
 ```
